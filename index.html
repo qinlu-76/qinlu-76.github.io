@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>你的名字 · 个人影像档案</title>
+  <meta name="description" content="我的个人照片、视频和文件档案盒。" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2305060e'/><rect x='22' y='26' width='56' height='40' rx='6' fill='%2322d3ee'/><circle cx='50' cy='46' r='10' fill='%2305060e'/><rect x='32' y='72' width='36' height='6' rx='3' fill='%23e879f9'/></svg>" />
+</head>
+<body id="top">
+  <header class="site-header">
+    <nav class="nav container" aria-label="主导航">
+      <a class="logo" href="#home"><span id="siteName">你的名字</span><em>的档案盒</em></a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">首页</a></li>
+        <li><a href="#albums">相册</a></li>
+        <li><a href="#gallery">影像</a></li>
+        <li><a href="#files">文件</a></li>
+        <li><a href="#about">关于</a></li>
+        <li class="nav-upload">
+          <button type="button" class="btn-upload" id="uploadBtn">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+            上传
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-bg" aria-hidden="true">
+        <canvas id="heroCanvas"></canvas>
+        <div class="hero-grid"></div>
+        <div class="hero-orb hero-orb-a"></div>
+        <div class="hero-orb hero-orb-b"></div>
+        <div class="hero-scan"></div>
+      </div>
+      <div class="hero-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+      <div class="hero-inner container">
+        <div class="hero-text">
+          <p class="hero-kicker"><span class="hero-pulse"></span>Personal archive · 影像档案</p>
+          <h1 id="heroTitle">记录生活里的<br />每一帧光影</h1>
+          <p class="hero-desc" id="heroTagline">这里保存着我的照片、视频和重要文件。</p>
+          <div class="hero-actions">
+            <a href="#gallery" class="btn btn-primary">浏览影像</a>
+            <a href="#albums" class="btn btn-ghost">查看相册</a>
+          </div>
+          <dl class="hero-stats">
+            <div class="stat"><dt>照片</dt><dd id="statPhotos">0</dd></div>
+            <div class="stat"><dt>视频</dt><dd id="statVideos">0</dd></div>
+            <div class="stat"><dt>相册</dt><dd id="statAlbums">0</dd></div>
+            <div class="stat"><dt>文件</dt><dd id="statFiles">0</dd></div>
+          </dl>
+        </div>
+
+        <div class="hero-collage" id="heroCollage" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="section container" id="albums">
+      <div class="section-head">
+        <div class="section-head-row">
+          <div>
+            <h2>相册</h2>
+            <p>按主题整理的照片与视频，点击进入对应相册。</p>
+          </div>
+          <button type="button" class="btn-create-album" id="createAlbumBtn">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            创建相册
+          </button>
+        </div>
+        <div class="album-create" id="albumCreateBox" hidden>
+          <input type="text" id="albumCreateName" maxlength="60" placeholder="输入相册名称，例如：2026 旅行" aria-label="新相册名称" />
+          <button type="button" class="mini-btn primary" id="albumCreateConfirm">创建</button>
+          <button type="button" class="mini-btn" id="albumCreateCancel">取消</button>
+        </div>
+      </div>
+      <div class="album-grid" id="albumGrid"></div>
+    </section>
+
+    <section class="section container" id="gallery">
+      <div class="section-head">
+        <h2>影像</h2>
+        <p>所有照片和视频，按时间倒序排列。</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="chips" id="albumChips"></div>
+        <div class="toolbar-right">
+          <div class="segmented" id="typeFilter" role="group" aria-label="按类型筛选">
+            <button type="button" data-type="all" class="active">全部</button>
+            <button type="button" data-type="photo">照片</button>
+            <button type="button" data-type="video">视频</button>
+          </div>
+          <label class="search">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/></svg>
+            <input type="search" id="searchInput" placeholder="搜索标题 / 相册" aria-label="搜索影像" />
+          </label>
+        </div>
+      </div>
+
+      <div id="mediaGrid"></div>
+      <div class="empty" id="galleryEmpty" hidden>
+        <strong>还没有影像</strong>
+        <span>点击右上角「上传」添加照片和视频，<br />
+          或把文件放进 <code>media/</code> 文件夹后运行 <code>node tools/scan-media.js</code>。</span>
+      </div>
+    </section>
+
+    <section class="section container" id="files">
+      <div class="section-head">
+        <h2>文件</h2>
+        <p>文档、压缩包等资料，点击即可下载。</p>
+      </div>
+      <div class="file-list" id="filesList"></div>
+      <div class="empty" id="filesEmpty" hidden>
+        <strong>还没有文件</strong>
+        <span>把 PDF、Word、压缩包等放进 <code>files/</code> 文件夹，<br />
+          然后运行 <code>node tools/scan-media.js</code>。</span>
+      </div>
+    </section>
+
+    <section class="section container" id="about">
+      <div class="section-head">
+        <h2>关于这个档案盒</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text" id="aboutText">
+          <p>这里是我存放照片、视频和资料的个人空间。</p>
+        </div>
+        <div class="contact-list">
+          <a class="contact-item" id="contactEmail" href="mailto:your@email.com">
+            <span>邮箱</span><b>your@email.com</b>
+          </a>
+          <a class="contact-item" id="contactGithub" href="https://github.com/" target="_blank" rel="noopener">
+            <span>GitHub</span><b>@yourname</b>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> <span id="footerName">你的名字</span></span>
+      <a href="#home">回到首页 ↑</a>
+    </div>
+  </footer>
+
+  <div class="uploader" id="uploader" role="dialog" aria-modal="true" aria-label="上传照片或视频">
+    <div class="upload-panel">
+      <div class="upload-head">
+        <div>
+          <h3>上传照片 / 视频</h3>
+          <p class="upload-sub">先预览确认，再点击「确认上传」保存到网站。</p>
+        </div>
+        <button type="button" class="icon-close" id="uploadClose" aria-label="关闭上传窗口">✕</button>
+      </div>
+
+      <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="选择或拖入照片视频">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+        <p><strong>点击选择文件</strong>，或把照片 / 视频拖到这里</p>
+        <p class="dropzone-hint">支持 JPG、PNG、WebP、GIF、MP4、WebM 等格式，可多选</p>
+        <input type="file" id="fileInput" accept="image/*,video/*" multiple hidden />
+      </div>
+
+      <ul class="upload-list" id="uploadList"></ul>
+
+      <div class="upload-row">
+        <label class="album-field">
+          <span>上传到相册</span>
+          <input type="text" id="albumInput" list="albumOptions" value="我的上传" maxlength="60" />
+        </label>
+        <button type="button" class="new-album-btn" id="newAlbumBtn">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          新建相册
+        </button>
+        <datalist id="albumOptions"></datalist>
+      </div>
+
+      <div class="new-album" id="newAlbumBox" hidden>
+        <input type="text" id="newAlbumName" maxlength="60" placeholder="输入新相册名称，例如：2026 旅行" aria-label="新相册名称" />
+        <button type="button" class="mini-btn primary" id="newAlbumCreate">创建</button>
+        <button type="button" class="mini-btn" id="newAlbumCancel">取消</button>
+      </div>
+
+      <p class="upload-note" id="uploadNote" hidden></p>
+
+      <div class="upload-actions">
+        <button type="button" class="btn btn-ghost" id="uploadCancel">取消</button>
+        <button type="button" class="btn btn-primary" id="uploadConfirm" disabled>确认上传</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="影像预览">
+    <div class="lightbox-top">
+      <span id="lbCounter"></span>
+      <div class="lightbox-actions">
+        <button type="button" class="lb-delete" id="lbDelete">删除</button>
+        <a id="lbDownload" href="#" download>下载</a>
+        <button type="button" id="lbClose" aria-label="关闭预览">关闭 ✕</button>
+      </div>
+    </div>
+
+    <button type="button" class="lb-nav lb-prev" id="lbPrev" aria-label="上一张">‹</button>
+    <button type="button" class="lb-nav lb-next" id="lbNext" aria-label="下一张">›</button>
+
+    <figure class="lightbox-stage">
+      <div class="lb-media" id="lbMedia"></div>
+      <figcaption>
+        <h4 id="lbTitle"></h4>
+        <p id="lbMeta"></p>
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/site-info.js"></script>
+  <script src="js/media-data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
